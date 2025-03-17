@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofoliul Meu</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        .project {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .project.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .project a {
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .project a:hover {
+            color: #ff4500;
+            transform: scale(1.1);
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: white;
+            transition: all 0.3s ease;
+            padding: 15px 20px;
+        }
+        header.shrink {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .back-to-top {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff4500;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .contact-form button {
+            background: #ff4500;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Iulia - Frontend Developer</h1>
+        <button id="dark-mode-toggle">🌙</button>
+        <nav>
+            <ul>
+                <li><a href="#about">Despre</a></li>
+                <li><a href="#projects">Proiecte</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="about">
+        <h2>Despre mine</h2>
+        <p>Sunt un dezvoltator frontend pasionat, care creează experiențe web moderne și interactive.</p>
+    </section>
+    
+    <section id="projects">
+        <h2>Proiectele mele</h2>
+        <div class="project-list">
+            <div class="project">
+                <h3>Proiect 1</h3>
+                <p>Descriere scurtă</p>
+                <a href="#">Vezi detalii</a>
+            </div>
+            <div class="project">
+                <h3>Proiect 2</h3>
+                <p>Descriere scurtă</p>
+                <a href="#">Vezi detalii</a>
+            </div>
+            <div class="project">
+                <h3>Proiect 3</h3>
+                <p>Descriere scurtă</p>
+                <a href="#">Vezi detalii</a>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <h2>Contact</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Nume" required>
+            <input type="email" placeholder="Email" required>
+            <textarea placeholder="Mesaj" required></textarea>
+            <button type="submit">Trimite</button>
+        </form>
+    </section>
+    
+    <button class="back-to-top">⬆️</button>
+    
+    <footer>
+        <p>&copy; 2025 Mihai - Toate drepturile rezervate.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll("nav ul li a");
+            links.forEach(link => {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute("href").substring(1);
+                    document.getElementById(targetId).scrollIntoView({ behavior: "smooth" });
+                });
+            });
+
+            // Dark mode toggle
+            const toggleButton = document.getElementById("dark-mode-toggle");
+            toggleButton.addEventListener("click", function() {
+                document.body.classList.toggle("dark-mode");
+                localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+            });
+
+            // Header shrink on scroll
+            window.addEventListener("scroll", function() {
+                const header = document.querySelector("header");
+                if (window.scrollY > 50) {
+                    header.classList.add("shrink");
+                } else {
+                    header.classList.remove("shrink");
+                }
+            });
+
+            // Back to top button
+            const backToTop = document.querySelector(".back-to-top");
+            window.addEventListener("scroll", function() {
+                if (window.scrollY > 300) {
+                    backToTop.style.display = "block";
+                } else {
+                    backToTop.style.display = "none";
+                }
+            });
+            backToTop.addEventListener("click", function() {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+
+            // Apare secțiunile treptat la scroll
+            const projects = document.querySelectorAll(".project");
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            }, { threshold: 0.2 });
+            projects.forEach(project => observer.observe(project));
+        });
+    </script>
+</body>
+</html>
